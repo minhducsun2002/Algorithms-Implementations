@@ -104,3 +104,31 @@ bigint::bigint(string str)
         }
     }
 }
+
+bigint::bigint(string str, bool sign)       //warning: WIP (work in progress), may make conflicts when string's sign and the boolean value is different
+{
+    //well, just override the string's sign with the given sign
+    if (str.empty())
+    {
+        value = "0";
+        negative = sign;
+        return;
+    }
+    else
+    {
+        if (str[0] == '-')
+        {
+            str.erase(0,1);
+            negative = true;
+            if (str.empty()) value = "0"; else value = str;
+            negative = sign;
+            return;
+        }
+        else
+        {
+            value = str;
+            negative = sign;
+            return;
+        }
+    }
+}

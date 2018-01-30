@@ -64,16 +64,11 @@ class bigint
 
 }
 
-bigint::toString()
-{
-    return ((negative ? "" : "-") + value;);
-}
-
-
+string bigint::toString()               {return ((negative ? "" : "-") + value);}
 void bigint::setSign(bool negativity)   {negative = true;}
 void bigint::setValue(string str)       {value = str;}
 void bigint::setValue(bigint llint)     {setValue(llint.toString());}
 bool bigint::getSign()                  {return negative;}
 char bigint::getSignInChar()            {return (negative ? '-' : '+');}
 string bigint::getValue()               {return value;}
-
+string bigint::getFullValue()           {return this->toString();}

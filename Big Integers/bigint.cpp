@@ -64,6 +64,8 @@ class bigint
 
 }
 
+
+//data type manipulation
 string bigint::toString()               {return ((negative ? "" : "-") + value);}
 void bigint::setSign(bool negativity)   {negative = true;}
 void bigint::setValue(string str)       {value = str;}
@@ -72,3 +74,33 @@ bool bigint::getSign()                  {return negative;}
 char bigint::getSignInChar()            {return (negative ? '-' : '+');}
 string bigint::getValue()               {return value;}
 string bigint::getFullValue()           {return this->toString();}
+
+
+//constructors
+bigint::bigint()                        
+{
+    value = "0";
+}
+
+bigint::bigint(string str)
+{
+    if (str.empty())
+    {
+        value = "0";
+        return;
+    }
+    else
+    {
+        if (str[0] == '-')
+        {
+            str.erase(0,1);
+            negative = true;
+            if (str.empty()) value = "0"; else value = str;
+            return;
+        }
+        else
+        {
+            value = str; return;
+        }
+    }
+}

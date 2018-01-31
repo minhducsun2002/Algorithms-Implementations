@@ -44,9 +44,6 @@ class AdjList
     int findEdge(int, int);
     bool isEdge(int, int);
     void pushEdge(int, int, __prop);
-    void popEdge();
-    void popEdge(int v);
-    void eraseEdge(int, int);
     void Print();
     int atEdge(int, int);
     __prop weightEdge(int, int);

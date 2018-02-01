@@ -139,3 +139,25 @@ bigint::bigint(lint num)
 }
 
 
+/*
+int main()
+{
+    cout << "Please enter a number: ";
+    string str; cin >> str;
+    typedef bigint llint;
+    llint _instance1 (str);
+    llint _emptyInstance;
+    cout << "Results: " << endl;
+
+    //for each function, <cout> a line
+
+    //toString and all constructors are tested
+    cout << _instance1.bigint::toString() << endl;
+    cout << "[Default value:] " << _emptyInstance.toString() << endl;
+    llint _instance2 (str, true); cout << "[Force negative:] " << _instance2.toString() << endl;
+    llint _instance3 (_instance2.toString(), false); cout << "[Force positive (after negating above): ] " << _instance3.toString() << endl;
+
+    cout << "Please enter a number (<long long int> range): "; lint _tmpLLInt; cin >> _tmpLLInt;
+    llint _instance4 (_tmpLLInt); cout << "[Converted value:] " << _instance4.toString() << endl;
+}
+*/

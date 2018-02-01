@@ -62,7 +62,7 @@ class bigint
 
 
 
-}
+};
 
 
 //data type manipulation
@@ -132,3 +132,10 @@ bigint::bigint(string str, bool sign)       //warning: WIP (work in progress), m
         }
     }
 }
+
+bigint::bigint(lint num)
+{
+    value = to_string(num);
+}
+
+

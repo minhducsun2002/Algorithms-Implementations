@@ -13,4 +13,6 @@ Currently stable:
         (note: the given sign will override the sign detected from string, if any)
         
     - Constructor with given value (as `long long int`)
-        
+- Helper functions
+    - Converting to `std::string` (directly or through an aliasing function)
+    - Setting & retrieving `negative` bit (in `bool` or in `char`)

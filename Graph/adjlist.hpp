@@ -49,6 +49,11 @@ class AdjList
     __prop weightEdge(int, int);
 };
 
+bool AdjList::isNode(int node)
+{
+    return (node >= 0 && node < _Node);
+}
+
 AdjList::AdjList(int nodes)
 {
     if (nodes < 1)
@@ -57,9 +62,19 @@ AdjList::AdjList(int nodes)
     _AdjList.assign(nodes, __vii());
 }
 
-bool AdjList::isNode(int node)
+int AdjList::findEdge(int node, int id)
 {
-    return (node >= 0 && node < _Node);
+    if (!isNode(node))
+        return 0;
+    int itr = (int)_AdjList[node].size();
+    while (itr--)
+    {
+        if (_AdjList[node][itr].first == id)
+            break;
+    }
+    // = 0 : not found | >0 : found
+    return (itr + 1);
+    // output count
 }
 
 bool AdjList::isEdge(int node, int id)

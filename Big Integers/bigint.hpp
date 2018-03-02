@@ -26,6 +26,7 @@ class bigint
     void setValue(bigint llint);
     bool getSign(); char getSignInChar();   
     string getFullValue();
+    void operator = (bigint otherObject);
     
 
     //arithmetic operations

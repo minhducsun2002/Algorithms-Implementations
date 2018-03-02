@@ -18,3 +18,9 @@ Currently stable:
     - Setting values through `std::string`
     - Setting & retrieving `negative` bit (in `bool` or in `char`)
     - Assignment operator (instead of setting values and signs each time, increasing complexity)
+
+
+Work in progress:
+- Arithmetic oprations
+    - Addition
+    - Subtraction

@@ -161,10 +161,12 @@ bigint bigint::operator + (bigint addend)
 	}
 	string add1 = this->getValue(), add2 = addend.getValue();
 	
-	
+	//padding
 	while (add1.length() < add2.length()) add1 = "0" + add1;
 	while (add2.length() < add1.length()) add2 = "0" + add2;
 	
+
+
 	string answer = "";
 	
 	reverse(add1.begin(), add1.end());
@@ -207,9 +209,37 @@ bigint bigint::operator - (bigint subtrahend)
 		return (*this - tmp1);
 	}
 	
-	
 	string add1 = this->getValue(), add2 = subtrahend.getValue();
 	
+
+    //padding
+	while (add1.length() < add2.length()) add1 = "0" + add1;
+	while (add2.length() < add1.length()) add2 = "0" + add2;
+
+
+    bool neg = false;
+    if (add1 < add2)
+    {
+         add1.swap(add2); neg = true;
+    }
+
+    
+    int remsub = 0;     //carry
+    string answer = "";
+    for (lint i = add1.length() - 1 ; i >= 0 ; i--)
+    {
+        int current = (add1[i] - '0') - (add2[i] - '0') - remsub;   //calculating
+        remsub = 0; //clear value
+        if (curr < 0)
+        {
+            remsub = 1; //raise if have to borrow
+            curr += 10;
+        };
+        answer.append(1, ((curr % 10) + '0'))
+    }
+    std::reverse(answer.begin(), answer.end());
+    bigint tmp (answer, neg);
+    return tmp;
 }
 
 

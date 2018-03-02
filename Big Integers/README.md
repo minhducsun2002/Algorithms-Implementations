@@ -15,4 +15,6 @@ Currently stable:
     - Constructor with given value (as `long long int`)
 - Helper functions
     - Converting to `std::string` (directly or through an aliasing function)
+    - Setting values through `std::string`
     - Setting & retrieving `negative` bit (in `bool` or in `char`)
+    - Assignment operator (instead of setting values and signs each time, increasing complexity)

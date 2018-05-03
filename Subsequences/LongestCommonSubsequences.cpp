@@ -26,4 +26,22 @@ int main()
 		else arr[i][n] = (arr[i - 1][n] > arr[n - 1][i]) ? arr[i - 1][n] : arr[i][n - 1];
 	};
 	cout << "Length of the longest common subsequence : " << arr[str1.length() - 1][str2.length() - 1] << endl;
+	
+	string out = "";
+	llint i = str1.length() - 1, n = str2.length() - 1;
+	while (i >= 0 && n >= 0)
+	{
+		if (str1[i] == str2[n])
+		{
+			out.push_back(str1[i]);
+			i--; n--;
+		}
+		else if (arr[i - 1][n] > arr[i][n - 1])
+		{
+			i--;
+		}
+		else n--;
+	}
+	reverse(out.begin(), out.end());
+	cout << "Subsequence: " << out << endl;
 }

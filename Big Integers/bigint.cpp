@@ -6,38 +6,14 @@
 #include <algorithm>
 #include <iterator>
 #include <cmath>
-#include <iomanip>
 #include <cstring>
 #include <string>
 #include <cstdlib>
-#include <queue>
-#include <list>
-#include <set>
-#include <stack>
-#include <sstream>
-#include <fstream>
 #include <complex>
 #include <numeric>
 
-char to_char(int i)
-{
-	switch (i)
-	{
-		case 0: return '0'; case 1: return '1'; case 2: return '2';
-		case 3: return '3'; case 4: return '4'; case 5: return '5';
-		case 6: return '6'; case 7: return '7'; case 8: return '8'; case 9: return '9';
-	}
-}
-
-int to_digit(char c)
-{
-	switch (c)
-	{
-		case '0': return 0; case '1': return 1; case '2': return 2;
-		case '3': return 3; case '4': return 4; case '5': return 5;
-		case '6': return 6; case '7': return 7; case '8': return 8; case '9': return 9;
-	}
-}
+char to_char(int i)		{return ((i % 10 ) + '0');}
+int to_digit(char c)	{return (c - '0');}
 
 
 using namespace std;
@@ -106,7 +82,7 @@ char bigint::getSignInChar()            {return (negative ? '-' : '+');}
 string bigint::getValue()               {return value;}
 string bigint::getFullValue()           {return this->toString();}
 void bigint::operator = (bigint otherObject) {this->value = otherObject.value; this->negative = otherObject.negative;}
-bool bigint::isNeg()							{return negative;}
+bool bigint::isNeg()					{return negative;}
 
 //constructors
 bigint::bigint()                       	{value = "0";}
@@ -163,7 +139,7 @@ string bigint::add(string str1, string str2)
         carry = (currentSum >> 1) / 5;
         answer.push_back(to_char(currentSum % 10));
     };
-    if (carry) answer.push_back('1');  reverse(answer.begin(), answer.end()); return answer;
+    if (carry) answer.push_back('1'); reverse(answer.begin(), answer.end()); return answer;
 }
 
 string bigint::sub(string str1, string str2)
@@ -189,18 +165,8 @@ bigint bigint::operator + (bigint addend2)
 {
 	bigint addend1 = *this;
 	bool add1_neg = addend1.negative, add2_neg = addend2.negative;
-	if (add1_neg && (!add2_neg))	//if add1 is negative, add2 is positive
-	{
-		string str1 = addend1.value, str2 = addend2.value;
-		string result = sub(str2, str1); 
-		bigint returnInstance (result); return returnInstance;
-	};
-	if ((!add1_neg) && add2_neg)	//if add1 is positive, add2 is negative
-	{
-		string str1 = addend1.value, str2 = addend2.value;
-		string result = sub(str1, str2);
-		bigint returnInstance (result); return returnInstance;
-	};
+	if (add1_neg && (!add2_neg)) return bigint(sub(addend2.value, addend1.value)); 
+	if ((!add1_neg) && add2_neg) return bigint(sub(addend1.value, addend2.value)); 
 	if ((!add1_neg) && (!add2_neg)) return (bigint(add(addend1.value, addend2.value)));
 	if (add1_neg && add2_neg) return bigint(add(addend1.value, addend2.value), true);
 }

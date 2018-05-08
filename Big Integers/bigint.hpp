@@ -7,33 +7,33 @@
 class bigint
 {
     private:
-    string value = "0" ;    //default value is initialized to 0
+    std::string value = "0" ;    //default value is initialized to 0
     bool negative = false;  //default sign is positive (+)
-	void standardify(string &str1, string &str2);	//padding the operands
-	string add(string str1, string str2);	//internal addition logic
-	string sub(string str1, string str2);	//internal subtraction logic
-	string mul(string str1, string str2);	//internal multiplication logic
-	string div(string str1, string str2);	//internal division logic
-	bool less_than(string str1, string str2);
-	bool greater_than(string str1, string str2);
-	bool equal_to(string str1, string str2);
-	bool less_than_or_equal_to(string str1, string str2);
-	bool greater_than_or_equal_to(string str1, string str2);
+	void standardify(std::string &str1, std::string &str2);	//padding the operands
+	std::string add(std::string str1, std::string str2);	//internal addition logic
+	std::string sub(std::string str1, std::string str2);	//internal subtraction logic
+	std::string mul(std::string str1, std::string str2);	//internal multiplication logic
+	std::string div(std::string str1, std::string str2);	//internal division logic
+	bool less_than(std::string str1, std::string str2);
+	bool greater_than(std::string str1, std::string str2);
+	bool equal_to(std::string str1, std::string str2);
+	bool less_than_or_equal_to(std::string str1, std::string str2);
+	bool greater_than_or_equal_to(std::string str1, std::string str2);
 		
     public:
     //constructor																						
     bigint();   //create instance with default value (= 0);
-    bigint(string str); //create instance with defined value
-    bigint(string str, bool sign);  //create instance with defined value and sign
+    bigint(std::string str); //create instance with defined value
+    bigint(std::string str, bool sign);  //create instance with defined value and sign
 
     //data type manipulation
-    string toString();
+    std::string toString();
     void setSign(bool negativity);
-    void setValue(string str);
+    void setValue(std::string str);
     void setValue(bigint llint);
     bool getSign(); char getSignInChar();
-    string getValue();
-    string getFullValue();
+    std::string getValue();
+    std::string getFullValue();
 	bool isNeg();
     void operator = (bigint otherObject);
 

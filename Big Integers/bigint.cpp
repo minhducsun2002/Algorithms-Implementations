@@ -12,6 +12,8 @@
 #include <complex>
 #include <numeric>
 
+#include "bigint.hpp"
+
 char to_char(int i)		{return ((i % 10 ) + '0');}
 int to_digit(char c)	{return (c - '0');}
 

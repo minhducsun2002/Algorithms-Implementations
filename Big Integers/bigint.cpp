@@ -1,7 +1,5 @@
-//61ph3r
 #include <iostream>
 #include <ios>
-#include <regex>
 #include <array>
 #include <string>
 #include <cstdio>
@@ -17,11 +15,9 @@
 #include <set>
 #include <stack>
 #include <sstream>
-#include <streambuf>
 #include <fstream>
 #include <complex>
 #include <numeric>
-#include <random>
 
 char to_char(int i)
 {
@@ -53,17 +49,22 @@ class bigint
     private:
     string value = "0" ;    //default value is initialized to 0
     bool negative = false;  //default sign is positive (+)
-	pair <string, string> standardify(string str1, string str2);	//padding the operands
+	void standardify(string &str1, string &str2);	//padding the operands
 	string add(string str1, string str2);	//internal addition logic
 	string sub(string str1, string str2);	//internal subtraction logic
-	
+	string mul(string str1, string str2);	//internal multiplication logic
+	string div(string str1, string str2);	//internal division logic
+	bool less_than(string str1, string str2);
+	bool greater_than(string str1, string str2);
+	bool equal_to(string str1, string str2);
+	bool less_than_or_equal_to(string str1, string str2);
+	bool greater_than_or_equal_to(string str1, string str2);
+		
     public:
     //constructor																						
     bigint();   //create instance with default value (= 0);
     bigint(string str); //create instance with defined value
     bigint(string str, bool sign);  //create instance with defined value and sign
-    bigint(lint num);   //create instance with given numerical value in STL integer
-                        //(long long int used to allow casting from all integers in STL's scope)
 
     //data type manipulation
     string toString();
@@ -84,9 +85,14 @@ class bigint
     bigint abs(bigint param);
     void increment();
     void decrement();
-
-
-
+    
+    //comparison operations
+    bool operator < (bigint compObject1);
+    bool operator > (bigint compObject1);
+    bool operator == (bigint compObject1);
+    bool operator != (bigint compObject1);
+    bool operator >= (bigint compObject1);
+    bool operator <= (bigint compObject1);
 };
 
 
@@ -100,6 +106,7 @@ char bigint::getSignInChar()            {return (negative ? '-' : '+');}
 string bigint::getValue()               {return value;}
 string bigint::getFullValue()           {return this->toString();}
 void bigint::operator = (bigint otherObject) {this->value = otherObject.value; this->negative = otherObject.negative;}
+bool bigint::isNeg()							{return negative;}
 
 //constructors
 bigint::bigint()                       	{value = "0";}
@@ -118,39 +125,35 @@ bigint::bigint(string str)
     };
 }
 
-bigint::bigint(string str, bool sign)       //warning: WIP (work in progress), may conflicts when string's sign and the boolean value is different
+bigint::bigint(string str, bool negative)
 {
-    //well, just override the string's sign with the given sign
     if (str.empty())
     {
-        value = "0"; negative = sign;
+        value = "0"; this->negative = negative;
     }
     else
     {
         if (str.front() == '-')
         {
-        	str.erase(str.begin()); negative = sign; 
-            value = (str.empty()) ? "0" : str;
+        	str.erase(str.begin());
+			this->negative = negative; value = (str.empty()) ? "0" : str;
         }
         else
         {
-            value = str; negative = sign;
+            value = str; this->negative = negative;
         }
     }
 }
 
-bigint::bigint(lint num)				{value = to_string(num);}
 
-
-
-void standardify(string &str1, string &str2)	//pad strings with zeroes
+void bigint::standardify(string &str1, string &str2)	//pad strings with zeroes
 {
 	if (str1.size() == str2.size()) return;
     if (str1.size() < str2.size()) str1.insert(str1.begin(),str2.length() - str1.length(), '0');
     else str2.insert(str2.begin(), str1.length() - str2.length(), '0');
 }
 
-string add(string str1, string str2)
+string bigint::add(string str1, string str2)
 {
     standardify(str1, str2);
     string answer = ""; int carry = 0;
@@ -163,9 +166,9 @@ string add(string str1, string str2)
     if (carry) answer.push_back('1');  reverse(answer.begin(), answer.end()); return answer;
 }
 
-string sub(string str1, string str2)
+string bigint::sub(string str1, string str2)
 {
-    standardify(str1, str2);
+	standardify(str1, str2);
 	bool neg = (str1 < str2) ? true : false; if (neg) swap(str1, str2);
 	int carry = 0; string answer = "";
 	for (lint i = str1.length() - 1; i >= 0 ; i--)
@@ -182,3 +185,32 @@ string sub(string str1, string str2)
 	reverse(begin(answer), end(answer)); return neg ? ("-" + answer) : answer;
 }
 
+bigint bigint::operator + (bigint addend2)
+{
+	bigint addend1 = *this;
+	bool add1_neg = addend1.negative, add2_neg = addend2.negative;
+	if (add1_neg && (!add2_neg))	//if add1 is negative, add2 is positive
+	{
+		string str1 = addend1.value, str2 = addend2.value;
+		string result = sub(str2, str1); 
+		bigint returnInstance (result); return returnInstance;
+	};
+	if ((!add1_neg) && add2_neg)	//if add1 is positive, add2 is negative
+	{
+		string str1 = addend1.value, str2 = addend2.value;
+		string result = sub(str1, str2);
+		bigint returnInstance (result); return returnInstance;
+	};
+	if ((!add1_neg) && (!add2_neg)) return (bigint(add(addend1.value, addend2.value)));
+	if (add1_neg && add2_neg) return bigint(add(addend1.value, addend2.value), true);
+}
+
+bigint bigint::operator - (bigint subtrahend)
+{
+	bigint minuend = *this;
+	bool minu_neg = minuend.negative, subtr_neg = subtrahend.negative;
+	if (minu_neg && (!subtr_neg)) return bigint(add(minuend.value, subtrahend.value),true);
+	if ((!minu_neg) && subtr_neg) return bigint(add(minuend.value, subtrahend.value));
+	if (minu_neg && subtr_neg) return bigint(sub(subtrahend.value, minuend.value));
+	if ((!minu_neg) && (!subtr_neg)) return bigint(sub(minuend.value, subtrahend.value));
+}

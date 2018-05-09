@@ -20,7 +20,7 @@ int to_digit(char c)	{return (c - '0');}
 
 using namespace std;
 
-typedef long long int lint;
+typedef long long int llint;
 
 class bigint
 {

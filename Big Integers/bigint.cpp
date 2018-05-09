@@ -27,16 +27,6 @@ class bigint
     private:
     string value = "0" ;    //default value is initialized to 0
     bool negative = false;  //default sign is positive (+)
-	void standardify(string &str1, string &str2);	//padding the operands
-	string add(string str1, string str2);	//internal addition logic
-	string sub(string str1, string str2);	//internal subtraction logic
-	string mul(string str1, string str2);	//internal multiplication logic
-	string div(string str1, string str2);	//internal division logic
-	bool less_than(string str1, string str2);
-	bool greater_than(string str1, string str2);
-	bool equal_to(string str1, string str2);
-	bool less_than_or_equal_to(string str1, string str2);
-	bool greater_than_or_equal_to(string str1, string str2);
 		
     public:
     //constructor																						
@@ -63,7 +53,7 @@ class bigint
     bigint abs(bigint param);
     void increment();
     void decrement();
-    
+
     //comparison operations
     bool operator < (bigint compObject1);
     bool operator > (bigint compObject1);
@@ -71,6 +61,18 @@ class bigint
     bool operator != (bigint compObject1);
     bool operator >= (bigint compObject1);
     bool operator <= (bigint compObject1);
+
+    private:    //internal logic
+    void standardify(string &str1, string &str2);	//padding the operands
+	string add(string str1, string str2);	//internal addition logic
+	string sub(string str1, string str2);	//internal subtraction logic
+	string mul(string str1, string str2);	//internal multiplication logic
+	string div(string str1, string str2);	//internal division logic
+	bool less_than(string str1, string str2);
+	bool greater_than(string str1, string str2);
+	bool equal_to(string str1, string str2);
+	bool less_than_or_equal_to(string str1, string str2);
+	bool greater_than_or_equal_to(string str1, string str2);
 };
 
 
@@ -83,7 +85,7 @@ bool bigint::getSign()                  {return negative;}
 char bigint::getSignInChar()            {return (negative ? '-' : '+');}
 string bigint::getValue()               {return value;}
 string bigint::getFullValue()           {return this->toString();}
-void bigint::operator = (bigint otherObject) {this->value = otherObject.value; this->negative = otherObject.negative;}
+void bigint::operator = (bigint otherObject)    {this->value = otherObject.value; this->negative = otherObject.negative;}
 bool bigint::isNeg()					{return negative;}
 
 //constructors
@@ -163,6 +165,18 @@ string bigint::sub(string str1, string str2)
 	reverse(begin(answer), end(answer)); return neg ? ("-" + answer) : answer;
 }
 
+string bigint::mul(string str1, string str2)
+{
+	string answer = "0";
+	for (llint i = str2.size() - 1 ; i >= 0 ; i--)
+	{
+		string digit_mul = "0";
+		for (llint n = str1.size() - 1 ; n >= 0 ; n--) digit_mul = add(digit_mul, to_string(to_digit(str1[n]) * to_digit(str2[i])) + string(str1.size() - 1 - n, '0'));
+		answer = add(answer, digit_mul + string(str2.size() - 1 - i, '0'));
+	};
+	return answer;
+}
+
 bigint bigint::operator + (bigint addend2)
 {
 	bigint addend1 = *this;
@@ -181,4 +195,11 @@ bigint bigint::operator - (bigint subtrahend)
 	if ((!minu_neg) && subtr_neg) return bigint(add(minuend.value, subtrahend.value));
 	if (minu_neg && subtr_neg) return bigint(sub(subtrahend.value, minuend.value));
 	if ((!minu_neg) && (!subtr_neg)) return bigint(sub(minuend.value, subtrahend.value));
+}
+
+bigint bigint::operator * (bigint multiplicand)
+{
+    bigint multiplier = *this;
+    bool mul1_neg = multiplier.negative, mul2_neg = multiplicand.negative;
+    return (mul1_neg == mul2_neg) ? bigint(mul(multiplier.value, multiplicand.value)) : bigint(mul(multiplier.value, multiplicand.value), true) 
 }

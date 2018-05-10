@@ -11,7 +11,7 @@
 #include <cstdlib>
 #include "bigint.hpp"
 
-char to_char(int i)		{return ((i % 10 ) + '0');}
+char to_char(int i)	    {return ((i % 10 ) + '0');}
 int to_digit(char c)	{return (c - '0');}
 
 
@@ -48,13 +48,16 @@ class bigint
     bigint operator * (bigint multiplicand);//multiplier * multiplicand = factors * factors = product
     bigint operator / (bigint divisor);     //dividend / divisor = numerator / denominator = fraction = quotient = ratio
     bigint abs(bigint param);
-    void increment();
-    void decrement();
 
     bigint& operator += (bigint& addend);
     bigint& operator -= (bigint& subtrahend);  
     bigint& operator *= (bigint& multiplicand);   
     bigint& operator /= (bigint& divisor);
+    
+    bigint& operator ++ ();
+    bigint operator ++ (int);
+    bigint& operator -- ();
+    bigint operator-- (int);
 	
     //comparison operations
     bool operator < (bigint compObject1);
@@ -72,9 +75,11 @@ class bigint
 	string div(string str1, string str2);	//internal division logic
 	bool less_than(string str1, string str2);
 	bool greater_than(string str1, string str2);
-	bool equal_to(string str1, string str2);
-	bool less_than_or_equal_to(string str1, string str2);
-	bool greater_than_or_equal_to(string str1, string str2);
+    bool equal_to(string str1, string str2);
+    bool less_than_or_equal_to(string str1, string str2);
+    bool greater_than_or_equal_to(string str1, string str2);
+    string increment(string str);
+    string decrement(string str);
 };
 
 
@@ -128,6 +133,50 @@ bigint::bigint(string str, bool negative)
 }
 
 //arithmetic operations
+bigint bigint::operator + (bigint addend2)
+{
+	return (this->negative == addend2.negative) ? ((this->negative == true) ? bigint(add(this->value, addend2.value), true) : (bigint(add(this->value, addend2.value)))) : ((this->negative == true) ? bigint(sub(addend2.value, this->value)) : bigint(sub(this->value, addend2.value)));
+}
+
+bigint bigint::operator - (bigint subtrahend)
+{
+	return (this->negative == subtrahend.negative) ? (this->negative == true ? bigint(sub(subtrahend.value, this->value)) : bigint(sub(this->value, subtrahend.value))) : (this->negative == true ? bigint(add(this->value, subtrahend.value), true) : bigint(add(this->value, subtrahend.value)));
+}
+
+bigint bigint::operator * (bigint multiplicand)
+{
+    return (this->negative == multiplicand.negative) ? bigint(mul(this->value, multiplicand.value)) : bigint(mul(this->value, multiplicand.value), true);
+}
+
+//self-assignment operations
+bigint& bigint::operator += (bigint& addend)		{this->setValue(*this + addend); return (*this);}
+bigint& bigint::operator -= (bigint& subtrahend)	{this->setValue(*this - subtrahend); return (*this);}
+bigint& bigint::operator *= (bigint& multiplicand)	{this->setValue(*this * multiplicand); return (*this);}
+
+//unary operations
+bigint& bigint::operator ++ ()	//prefix
+{
+	this->setValue(bigint(increment(this->toString()))); return *this;
+};
+
+bigint bigint::operator ++ (int)	//postfix
+{
+	bigint tmp = *this; ++*this; return tmp;
+}
+
+bigint& bigint::operator -- ()	//prefix
+{
+	this->setValue(bigint(decrement(this->toString()))); return *this;
+}
+
+bigint bigint::operator -- (int)	//postfix
+{
+	bigint tmp = *this; --*this; return tmp;
+}
+
+
+//===============================================================================
+//internal logic
 void bigint::standardify(string &str1, string &str2)	//pad strings with zeroes
 {
 	if (str1.size() == str2.size()) return;
@@ -155,12 +204,9 @@ string bigint::sub(string str1, string str2)
 	int carry = 0; string answer = "";
 	for (llint i = str1.length() - 1; i >= 0 ; i--)
 	{
-		int current = to_digit(str1[i]) - to_digit(str2[i]) - carry; carry = 0;	//take the carry and clear the carry
-		if (current < 0)
-		{
-			carry = 1;	//if borrowing needed, raise the carry
-			current += 10;
-		};
+		int current = to_digit(str1[i]) - to_digit(str2[i]) - carry; 
+		carry = current < 0 ? 1 : 0;
+		current += current < 0 ? 10 : 0;
 		answer.push_back(to_char(current % 10));
 	}
 	while (answer.back() == '0') answer.pop_back(); 
@@ -179,54 +225,29 @@ string bigint::mul(string str1, string str2)
 	return answer;
 }
 
-bigint bigint::operator + (bigint addend2)
+string bigint::decrement(string str)
 {
-	/*
-	bigint addend1 = *this;
-	bool add1_neg = addend1.negative, add2_neg = addend2.negative;
-	if (add1_neg && (!add2_neg)) return bigint(sub(addend2.value, addend1.value)); 
-	if ((!add1_neg) && add2_neg) return bigint(sub(addend1.value, addend2.value)); 
-	if ((!add1_neg) && (!add2_neg)) return (bigint(add(addend1.value, addend2.value)));
-	if (add1_neg && add2_neg) return bigint(add(addend1.value, addend2.value), true);
-	*/
-	return (this->negative == addend2.negative) ? ((this->negative == true) ? bigint(add(this->value, addend2.value), true) : (bigint(add(this->value, addend2.value)))) : ((this->negative == true) ? bigint(sub(addend2.value, this->value)) : bigint(sub(this->value, addend2.value)));
+	if (str == "0") return "-1";
+	int carry = 1;
+	for (llint i = str.size() - 1 ; i >= 0 ; i--)
+	{
+		int replace = to_digit(str[i]) - carry;
+		carry = replace < 0 ? 1 : 0;
+		replace += replace < 0 ? 10 : 0;
+		str[i] = to_char(replace);
+	};
+	return (str.front() == '0' ? str.substr(1) : str);
 }
 
-bigint bigint::operator - (bigint subtrahend)
+string bigint::increment(string str)
 {
-	bigint minuend = *this;
-	bool minu_neg = minuend.negative, subtr_neg = subtrahend.negative;
-    /*
-	if (minu_neg && (!subtr_neg)) return bigint(add(minuend.value, subtrahend.value), true);
-	if ((!minu_neg) && subtr_neg) return bigint(add(minuend.value, subtrahend.value));
-	if (minu_neg && subtr_neg) return bigint(sub(subtrahend.value, minuend.value));
-	if ((!minu_neg) && (!subtr_neg)) return bigint(sub(minuend.value, subtrahend.value));
-	*/
-	return (minu_neg == subtr_neg) ? (minu_neg == true ? bigint(sub(subtrahend.value, minuend.value)) : bigint(sub(minuend.value, subtrahend.value))) : (minu_neg == true ? bigint(add(minuend.value, subtrahend.value), true) : bigint(add(minuend.value, subtrahend.value)));
-}
-
-bigint bigint::operator * (bigint multiplicand)
-{
-	/*
-	bigint multiplier = *this;
-    bool mul1_neg = multiplier.negative, mul2_neg = multiplicand.negative;
-    return (mul1_neg == mul2_neg) ? bigint(mul(multiplier.value, multiplicand.value)) : bigint(mul(multiplier.value, multiplicand.value), true);
-	*/
-    return (this->negative == multiplicand.negative) ? bigint(mul(this->value, multiplicand.value)) : bigint(mul(this->value, multiplicand.value), true);
-}
-
-
-bigint& bigint::operator += (bigint& addend) 
-{
-	this->setValue(*this + addend);	return (*this);
-}
-
-bigint& bigint::operator -= (bigint& subtrahend) 
-{
-	this->setValue(*this - subtrahend);	return (*this);
-}
-
-bigint& bigint::operator *= (bigint& multiplicand)
-{
-	this->setValue(*this * multiplicand); return (*this);
+	if (str == "-1") return "0";
+	int carry = 1;
+	for (llint i = str.size() - 1 ; i >= 0 ; i--)
+	{
+		int replace = to_digit(str[i]) + carry;
+		carry = (replace >> 1) / 5;
+		str[i] = to_char(replace % 10);
+	};
+	return ((carry) ? ("1" + str) : str);
 }

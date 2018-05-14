@@ -8,7 +8,6 @@ const long long int MAX_STRING_SIZE_A = 1000;
 const long long int MAX_STRING_SIZE_B = 1000;
 
 llint arr[MAX_STRING_SIZE_A][MAX_STRING_SIZE_B];
-
 std::string lcs (std::string str1, std::string str2)
 {
 	str1 = " " + str1; str2 = " " + str2;	//padding
@@ -18,13 +17,13 @@ std::string lcs (std::string str1, std::string str2)
 	for (llint n = 1 ; n <= str2.length() - 1 ; n++)
 	{
 		if (str1[i] == str2[n]) arr[i][n] = arr[i - 1][n - 1] + 1;
-		else arr[i][n] = (arr[i - 1][n] > arr[n - 1][i]) ? arr[i - 1][n] : arr[i][n - 1];
+		else arr[i][n] = (arr[i - 1][n] > arr[n - 1][i]) ? arr[i - 1][n] : arr[n - 1][i];
 	};
-	std::cout << "Length of the longest common subsequence : " << arr[str1.length() - 1][str2.length() - 1] << std::endl;
+	//std::cout << "Length of the longest common subsequence : " << arr[str1.length() - 1][str2.length() - 1] << std::endl;
 	
 	std::string out = "";
 	llint i = str1.length() - 1, n = str2.length() - 1;
-	while (i >= 0 && n >= 0)
+	while (i >= 1 && n >= 1)
 	{
 		if (str1[i] == str2[n])
 		{

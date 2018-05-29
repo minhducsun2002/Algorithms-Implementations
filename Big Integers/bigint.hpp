@@ -3,6 +3,17 @@
 #ifndef BIGINT_CXX_INCLUDE
 #define BIGINT_CXX_INCLUDE
 
+#include <iostream>
+#include <ios>
+#include <array>
+#include <string>
+#include <cstdio>
+#include <algorithm>
+#include <iterator>
+#include <cmath>
+#include <cstring>
+#include <string>
+#include <cstdlib>
 
 class bigint
 {

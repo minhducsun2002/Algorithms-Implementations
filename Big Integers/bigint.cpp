@@ -177,14 +177,14 @@ bigint bigint::operator -- (int)	//postfix
 
 //===============================================================================
 //internal logic
-void bigint::standardify(string &str1, string &str2)	//pad strings with zeroes
+void bigint::standardify (string &str1, string &str2)	//pad strings with zeroes
 {
 	if (str1.size() == str2.size()) return;
     if (str1.size() < str2.size()) str1.insert(str1.begin(),str2.length() - str1.length(), '0');
     else str2.insert(str2.begin(), str1.length() - str2.length(), '0');
 }
 
-string bigint::add(string str1, string str2)
+string bigint::add (string str1, string str2)
 {
     standardify(str1, str2);
     string answer = ""; int carry = 0;
@@ -197,7 +197,7 @@ string bigint::add(string str1, string str2)
     if (carry) answer.push_back('1'); reverse(answer.begin(), answer.end()); return answer;
 }
 
-string bigint::sub(string str1, string str2)
+string bigint::sub (string str1, string str2)
 {
 	standardify(str1, str2);
 	bool neg = (str1 < str2) ? true : false; if (neg) swap(str1, str2);
@@ -213,7 +213,7 @@ string bigint::sub(string str1, string str2)
 	reverse(begin(answer), end(answer)); return neg ? ("-" + answer) : answer;
 }
 
-string bigint::mul(string str1, string str2)
+string bigint::mul (string str1, string str2)
 {
 	string answer = "0";
 	for (llint i = str2.size() - 1 ; i >= 0 ; i--)
@@ -225,7 +225,7 @@ string bigint::mul(string str1, string str2)
 	return answer;
 }
 
-string bigint::decrement(string str)
+string bigint::decrement (string str)
 {
 	if (str == "0") return "-1";
 	int carry = 1;
@@ -239,7 +239,7 @@ string bigint::decrement(string str)
 	return (str.front() == '0' ? str.substr(1) : str);
 }
 
-string bigint::increment(string str)
+string bigint::increment (string str)
 {
 	if (str == "-1") return "0";
 	int carry = 1;
@@ -250,4 +250,15 @@ string bigint::increment(string str)
 		str[i] = to_char(replace % 10);
 	};
 	return ((carry) ? ("1" + str) : str);
+}
+
+bool bigint::less_than (string str1, string str2)
+{
+    if (str1.size() < str2.size()) return true;
+    else if (str1.size() > str2.size()) return false;
+    for (llint i = 0 ; i <= str1.size() - 1 ; i++)
+    {
+        if ((to_digit(str1[i]) != to_digit(str2[i]))) return (to_digit(str1[i]) < to_digit(str2[i]));
+    }
+    return false;
 }

@@ -25,7 +25,7 @@ struct edge
 
 vector <vector <edge> > adjacencyList;
 
-vector <llint> dijkstra (llint source)
+vector <llint> dijkstra (llint source, llint target)
 {
 	llint verticesCount = adjacencyList.size();
 
@@ -33,6 +33,9 @@ vector <llint> dijkstra (llint source)
 	// the distance between a vertex and itself == 0;
 	traversed[source] = true;
 	distance[source] = 0;
+	
+	vector <llint> backtrace (adjacencyList.size(), MAX);
+	// keep the shortest path
 
 	for (llint currentVertex = 0; currentVertex <= verticesCount - 1 ; currentVertex++)
 	{
@@ -46,18 +49,42 @@ vector <llint> dijkstra (llint source)
 				traversed[i.targetVertex] = true;
 				// and also calculate the distance from current node
 				distance[i.targetVertex] = distance[currentVertex] + i.weight;
+				// overwriting traces
+				backtrace[i.targetVertex] = currentVertex;
 			}
 			// and if visited
 			else
 			{
 				// if path isn't optimal
 				if (distance[i.targetVertex] > distance[currentVertex] + i.weight) 
-					// then make it optimal!
+				{
+			        // then make it optimal!
 					distance[i.targetVertex] = distance[currentVertex] + i.weight;
+				    // and don't forget overwriting old traces
+					backtrace[i.targetVertex] = currentVertex;
+				}
 			};
 		};
 	};
-	return distance;
+	
+	vector <llint> path;
+    // trace back to source
+    llint current_head = target;
+    while (current_head != source)
+    {
+        path.push_back(current_head);
+        current_head = backtrace[current_head];
+    }
+	// in case
+	// the path is wanted in order source -> destination then uncomment the line below
+	// reverse (path.begin(), path.end()); 
+	return path;
+	// in case the shortest distance to each node is wanted (instead of shortest path),
+	// then
+	// ```
+	// return distance;
+	// ```
+	// instead.
 }
 
 main()
@@ -77,7 +104,7 @@ main()
 			adjacencyList[i].push_back(push);
 		};
 	};
-	vector <llint> out = dijkstra(0);
+	vector <llint> out = dijkstra(0, 4);
 	for (llint i : out) cout << (i != MAX ? to_string(i) : string ("MAX")) << " ";
 }
 
@@ -86,11 +113,9 @@ Input specification:
 number_of_vertex
 number_of_edges edge1_other_vertex edge1_weight edge2_other_vertex edge2_weight ...
 ...
-
 Output specification:
 distance from source (here I use 0) to each other vertex starting from vertex 0.
 an output of MAX indicates that it is impossible to reach the corresponding vertex.
-
 Test:
 {input}
 6
@@ -101,5 +126,5 @@ Test:
 0
 0
 {output}
-0 1 1 2 3 2 
+4 3 1
 */

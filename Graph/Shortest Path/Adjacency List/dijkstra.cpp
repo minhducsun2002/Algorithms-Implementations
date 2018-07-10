@@ -2,6 +2,8 @@
 #include <string>
 #include "dijkstra.hpp"
 
+std::vector<std::vector<edge>> adjacencyList;
+
 int main()
 {
 	llint verticesCount;
@@ -10,20 +12,20 @@ int main()
 	traversed.resize(verticesCount);
 	adjacencyList.resize(verticesCount);
 
-	for (llint i = 0; i <= verticesCount - 1; i++)
+	for (llint i = 0; i < verticesCount; i++)
 	{
 		llint neighbour_count;
 		std::cin >> neighbour_count;
-		while (neighbour_count--)
+		while (neighbour_count-- > 0)
 		{
 			// edge between vertex[i] and vertex[push.targetVertex] with weight = push.weight
 			edge push;
 			std::cin >> push.targetVertex >> push.weight;
 			adjacencyList[i].push_back(push);
-		};
-	};
-	std::vector<llint> out = dijkstra(0, 4);
-	for (llint i : out)
+		}
+	}
+	std::vector<llint> out = dijkstra(0, 4, adjacencyList);
+	for (const llint &i : out)
 		std::cout << (i != MAX ? std::to_string(i) : std::string("MAX")) << " ";
 }
 

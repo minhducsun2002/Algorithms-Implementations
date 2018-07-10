@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <climits>
+#include <set>
+#include <utility>
 
 typedef ssize_t llint;
 typedef size_t ullint;
@@ -24,9 +26,7 @@ struct edge
     // including the weight of the edge connecting them
 };
 
-std::vector<std::vector<edge>> adjacencyList;
-
-std::vector<llint> dijkstra(llint source, llint target)
+std::vector<llint> dijkstra(llint source, llint target, std::vector<std::vector<edge>> adjacencyList)
 {
     llint verticesCount = adjacencyList.size();
 
@@ -38,36 +38,22 @@ std::vector<llint> dijkstra(llint source, llint target)
     std::vector<llint> backtrace(adjacencyList.size(), MAX);
     // keep the shortest path
 
-    for (llint currentVertex = 0; currentVertex < verticesCount; currentVertex++)
+    std::set<std::pair<llint, llint>> vertices;
+    vertices.insert({0, source});
+    while (!vertices.empty())
     {
-        // for each vertex
-        for (const edge &i : adjacencyList[currentVertex])
-        {
-            const int &vertex = i.targetVertex;
-            const int &weight = i.weight;
-            // if current neighbour is unvisited
-            if (!traversed[vertex])
+        llint currentVertex = vertices.begin()->second;
+        if (currentVertex == target)
+            break;
+        vertices.erase(vertices.begin());
+        for (const auto &child : adjacencyList[currentVertex])
+            if (distance[child.targetVertex] > distance[currentVertex] + child.weight)
             {
-                // then visit it!
-                traversed[vertex] = true;
-                // and also calculate the distance from current node
-                distance[vertex] = distance[currentVertex] + weight;
-                // overwriting traces
-                backtrace[vertex] = currentVertex;
+                vertices.erase({distance[child.targetVertex], child.targetVertex});
+                distance[child.targetVertex] = distance[currentVertex] + child.weight;
+                vertices.insert({distance[child.targetVertex], child.targetVertex});
+                backtrace[child.targetVertex] = currentVertex;
             }
-            // and if visited
-            else
-            {
-                // if path isn't optimal
-                if (distance[vertex] > distance[currentVertex] + weight)
-                {
-                    // then make it optimal!
-                    distance[vertex] = distance[currentVertex] + weight;
-                    // and don't forget overwriting old traces
-                    backtrace[vertex] = currentVertex;
-                }
-            }
-        }
     }
 
     std::vector<llint> path;

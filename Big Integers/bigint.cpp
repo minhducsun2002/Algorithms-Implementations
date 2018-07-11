@@ -9,7 +9,7 @@
 #include <cstring>
 #include <string>
 #include <cstdlib>
-#include "bigint.hpp"
+// #include "bigint.hpp"
 
 char to_char(int i)	    {return ((i % 10 ) + '0');}
 int to_digit(char c)	{return (c - '0');}
@@ -60,12 +60,12 @@ class bigint
     bigint operator-- (int);
 	
     //comparison operations
-    bool operator < (bigint compObject1);
-    bool operator > (bigint compObject1);
-    bool operator == (bigint compObject1);
-    bool operator != (bigint compObject1);
-    bool operator >= (bigint compObject1);
-    bool operator <= (bigint compObject1);
+    bool operator < (bigint &compObject1);
+    bool operator > (bigint &compObject1);
+    bool operator == (bigint &compObject1);
+    bool operator != (bigint &compObject1);
+    bool operator >= (bigint &compObject1);
+    bool operator <= (bigint &compObject1);
 
     private:    //internal logic
     void standardify(string &str1, string &str2);	//padding the operands
@@ -174,17 +174,41 @@ bigint bigint::operator -- (int)	//postfix
 	bigint tmp = *this; --*this; return tmp;
 }
 
+// comparisons
+bool bigint::operator < (bigint &compObject1)
+{
+    if (this->negative != compObject1.negative) return (this->negative ? true : false);
+    if (this->negative) return !less_than(this->value, compObject1.value);
+    else return less_than(this->value, compObject1.value);
+}
+
+bool bigint::operator > (bigint &compObject1)
+{
+    if (this->negative != compObject1.negative) return (this->negative ? false : true);
+    if (this->negative) return !greater_than(this->value, compObject1.value);
+    else return greater_than(this->value, compObject1.value);
+}
+
+bool bigint::operator == (bigint &compObject1)
+{
+    return equal_to(this->value, compObject1.value);
+}
+
+bool bigint::operator != (bigint &compObject1)
+{
+    return !equal_to(this->value, compObject1.value);
+}
 
 //===============================================================================
 //internal logic
-void bigint::standardify(string &str1, string &str2)	//pad strings with zeroes
+void bigint::standardify (string &str1, string &str2)	//pad strings with zeroes
 {
 	if (str1.size() == str2.size()) return;
     if (str1.size() < str2.size()) str1.insert(str1.begin(),str2.length() - str1.length(), '0');
     else str2.insert(str2.begin(), str1.length() - str2.length(), '0');
 }
 
-string bigint::add(string str1, string str2)
+string bigint::add (string str1, string str2)
 {
     standardify(str1, str2);
     string answer = ""; int carry = 0;
@@ -197,7 +221,7 @@ string bigint::add(string str1, string str2)
     if (carry) answer.push_back('1'); reverse(answer.begin(), answer.end()); return answer;
 }
 
-string bigint::sub(string str1, string str2)
+string bigint::sub (string str1, string str2)
 {
 	standardify(str1, str2);
 	bool neg = (str1 < str2) ? true : false; if (neg) swap(str1, str2);
@@ -213,7 +237,7 @@ string bigint::sub(string str1, string str2)
 	reverse(begin(answer), end(answer)); return neg ? ("-" + answer) : answer;
 }
 
-string bigint::mul(string str1, string str2)
+string bigint::mul (string str1, string str2)
 {
 	string answer = "0";
 	for (llint i = str2.size() - 1 ; i >= 0 ; i--)
@@ -225,7 +249,7 @@ string bigint::mul(string str1, string str2)
 	return answer;
 }
 
-string bigint::decrement(string str)
+string bigint::decrement (string str)
 {
 	if (str == "0") return "-1";
 	int carry = 1;
@@ -239,7 +263,7 @@ string bigint::decrement(string str)
 	return (str.front() == '0' ? str.substr(1) : str);
 }
 
-string bigint::increment(string str)
+string bigint::increment (string str)
 {
 	if (str == "-1") return "0";
 	int carry = 1;
@@ -250,4 +274,39 @@ string bigint::increment(string str)
 		str[i] = to_char(replace % 10);
 	};
 	return ((carry) ? ("1" + str) : str);
+}
+
+bool bigint::less_than (string str1, string str2)
+{
+    if (str1.size() != str2.size()) return str1.size() < str2.size();
+    for (llint i = 0 ; i <= str1.size() - 1 ; i++)
+    {
+        if (str1[i] != str2[i]) return str1[i] < str2[i];
+    }
+    return false;
+}
+
+bool bigint::greater_than (string str1, string str2)
+{
+    if (str1.size() < str2.size()) return true; else if (str1.size() > str2.size()) return false;
+    for (llint i = 0 ; i <= str1.size() - 1 ; i++)
+    {
+        if (str1[i] != str2[i]) return str1[i] > str2[i];
+    }
+    return false;
+}
+
+bool bigint::equal_to (string str1, string str2)
+{
+    return str1 == str2;
+}
+
+bool bigint::less_than_or_equal_to (string str1, string str2)
+{
+    return less_than(str1, str2) || equal_to (str1, str2);
+}
+
+bool bigint::greater_than_or_equal_to (string str1, string str2)
+{
+    return greater_than(str1, str2) || equal_to (str1, str2);
 }

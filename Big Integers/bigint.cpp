@@ -9,7 +9,7 @@
 #include <cstring>
 #include <string>
 #include <cstdlib>
-#include "bigint.hpp"
+// #include "bigint.hpp"
 
 char to_char(int i)	    {return ((i % 10 ) + '0');}
 int to_digit(char c)	{return (c - '0');}
@@ -60,12 +60,12 @@ class bigint
     bigint operator-- (int);
 	
     //comparison operations
-    bool operator < (bigint compObject1);
-    bool operator > (bigint compObject1);
-    bool operator == (bigint compObject1);
-    bool operator != (bigint compObject1);
-    bool operator >= (bigint compObject1);
-    bool operator <= (bigint compObject1);
+    bool operator < (bigint &compObject1);
+    bool operator > (bigint &compObject1);
+    bool operator == (bigint &compObject1);
+    bool operator != (bigint &compObject1);
+    bool operator >= (bigint &compObject1);
+    bool operator <= (bigint &compObject1);
 
     private:    //internal logic
     void standardify(string &str1, string &str2);	//padding the operands
@@ -174,6 +174,30 @@ bigint bigint::operator -- (int)	//postfix
 	bigint tmp = *this; --*this; return tmp;
 }
 
+// comparisons
+bool bigint::operator < (bigint &compObject1)
+{
+    if (this->negative != compObject1.negative) return (this->negative ? true : false);
+    if (this->negative) return !less_than(this->value, compObject1.value);
+    else return less_than(this->value, compObject1.value);
+}
+
+bool bigint::operator > (bigint &compObject1)
+{
+    if (this->negative != compObject1.negative) return (this->negative ? false : true);
+    if (this->negative) return !greater_than(this->value, compObject1.value);
+    else return greater_than(this->value, compObject1.value);
+}
+
+bool bigint::operator == (bigint &compObject1)
+{
+    return equal_to(this->value, compObject1.value);
+}
+
+bool bigint::operator != (bigint &compObject1)
+{
+    return !equal_to(this->value, compObject1.value);
+}
 
 //===============================================================================
 //internal logic
@@ -254,11 +278,35 @@ string bigint::increment (string str)
 
 bool bigint::less_than (string str1, string str2)
 {
-    if (str1.size() < str2.size()) return true;
-    else if (str1.size() > str2.size()) return false;
+    if (str1.size() != str2.size()) return str1.size() < str2.size();
     for (llint i = 0 ; i <= str1.size() - 1 ; i++)
     {
-        if ((to_digit(str1[i]) != to_digit(str2[i]))) return (to_digit(str1[i]) < to_digit(str2[i]));
+        if (str1[i] != str2[i]) return str1[i] < str2[i];
     }
     return false;
+}
+
+bool bigint::greater_than (string str1, string str2)
+{
+    if (str1.size() < str2.size()) return true; else if (str1.size() > str2.size()) return false;
+    for (llint i = 0 ; i <= str1.size() - 1 ; i++)
+    {
+        if (str1[i] != str2[i]) return str1[i] > str2[i];
+    }
+    return false;
+}
+
+bool bigint::equal_to (string str1, string str2)
+{
+    return str1 == str2;
+}
+
+bool bigint::less_than_or_equal_to (string str1, string str2)
+{
+    return less_than(str1, str2) || equal_to (str1, str2);
+}
+
+bool bigint::greater_than_or_equal_to (string str1, string str2)
+{
+    return greater_than(str1, str2) || equal_to (str1, str2);
 }

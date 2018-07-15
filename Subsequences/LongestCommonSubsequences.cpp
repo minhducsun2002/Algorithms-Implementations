@@ -10,6 +10,15 @@ const long long int MAX_STRING_SIZE_B = 1000;
 llint arr[MAX_STRING_SIZE_A][MAX_STRING_SIZE_B];
 std::string lcs (std::string str1, std::string str2)
 {
+	// popping strings until their last character matches
+	while (str1.back() != str2.back() && str1.back() != *next(str2.rbegin()) && str2.back() != *next(str1.rbegin()))
+	{
+		str1.pop_back(); str2.pop_back();
+	};
+	if (str1.back() != str2.back()) if (str1.back() == *next(str2.rbegin())) str2.pop_back(); else str1.pop_back();
+
+
+
 	str1 = " " + str1; str2 = " " + str2;	//padding
 	//arr[0][0] = (str1[0] == str2[0]) ? 1 : 0;
 	

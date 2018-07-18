@@ -16,21 +16,31 @@ void buildtree(llint first_element, llint last_element, llint treenode)
 {
     if (first_element == last_element)
     {
+        // if this is a leaf node
         segtree[treenode] = arr[first_element];
+        // just perform assignment and then stop there
         return;
     }
+    // else
     llint mid = (last_element + first_element) >> 1;
+    // build the corresponding subtrees
     buildtree(first_element, mid, (treenode << 1) + 1);
     buildtree(mid + 1, last_element, (treenode << 1) + 2);
+    // and then update the minimum value at current node
     segtree[treenode] = min(segtree[(treenode << 1) + 1], segtree[(treenode << 1) + 2]);
 }
 
 llint rmq(llint first_element, llint last_element, llint treetop, llint arr_first, llint arr_second)
 {
     if (arr_first <= first_element && last_element <= arr_second) return segtree[treetop];
+    // if the query range is within the current range then reply with precalculated value
     if (arr_first > last_element || arr_second < first_element) return (llint) LLONG_MAX - 1e9;
+    // if out of range
+    // return the maximum value can be calculated (that will always result in other value being used)
+    // to not altering the right result
     llint mid = (first_element + last_element) >> 1;
     return min(rmq(first_element, mid, (treetop << 1) + 1, arr_first, arr_second), rmq(mid + 1, last_element, (treetop << 1) + 2, arr_first, arr_second));
+    // calculate from corresponding subtrees
 }
 
 // =================

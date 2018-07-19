@@ -6,19 +6,20 @@ Note that:
   Unless GNU G++ is used, it is recommended to include STL by hand, since some snippets use `bits/stdc++.h`, which is not C++ standard.
 
 ###### Currently implemented:
-- Big integers calculation (in C++11)
+- [Big integers calculation (in C++11)](/Big%20Integers)
   - Comparison
   - Arithmetic operations: addition, subtraction, multiplication
-- Mathematical matrix
-- Searching
-  - Binary search (on sorted array)
-- Sorting
-  - Merge sort
-  - Selection sort
-  - Bubble sort
-  - Insertion sort
-- Special subsequences
-  - Longest increasing subsequences
-  - Longest common subsequence
-- Strings
-  - Longest palindromic substring
+- [Mathematical matrix](/Matrix)
+- [Searching](/Searching)
+  - [Binary search (on sorted array)](/Searching/BinarySearch.cpp)
+- [Sorting](/Sorting%20Integers)
+  - [Merge sort](/Sorting%20Integers/mergeSort.cpp)
+  - [Selection sort](/Sorting%20Integers/selectionSort.cpp)
+  - [Bubble sort](/Sorting%20Integers/bubbleSort.cpp)
+  - [Insertion sort](/Sorting%20Integers/insertionSort.cpp)
+- [Special subsequences](/Subsequences)
+  - [Longest increasing subsequences](/Subsequences/LongestIncreasingSubsequences.cpp)
+  - [Longest common subsequence](/Subsequences/LongestCommonSubsequence.cpp)
+- [Strings](/String)
+  - [Longest palindromic substring](/String/Palindromic%20Substring)
+    - [Manacher's algorithm](/String/Palindromic%20Substring/LongestPalindromicSubstring_Manacher.cpp)

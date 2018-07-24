@@ -4,6 +4,8 @@ using namespace std;
 typedef long long int llint;
 // Knuth-Morris-Pratt string matching algorithm
 
+// This source file contains code that requires C++17 standard
+
 void partial_match_compute (string pattern, vector <llint>& table)
 {
 	llint length = 0;
@@ -30,8 +32,16 @@ void partial_match_compute (string pattern, vector <llint>& table)
 	}
 }
 
-vector <llint> kmp (string str, string pattern)
+#if __cpluscplus>=201703L
+vector <llint> kmp (string& str_, string& pattern_)
+#else
+vector <llint> kmp (string& str, string& pattern)
+#endif
 {
+	#if __cpluscplus>=201703L
+	string_view str = str_;
+	string_view pattern = pattern_;
+	#endif
 	vector <llint> partial_match_table (pattern.size());
 	partial_match_compute(pattern, partial_match_table);
 	vector <llint> out;

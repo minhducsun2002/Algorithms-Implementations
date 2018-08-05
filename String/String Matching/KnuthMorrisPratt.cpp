@@ -15,19 +15,13 @@ void partial_match_compute (string pattern, vector <llint>& table)
 	while (i <= pattern.size() - 1)
 	{
 		if (pattern[i] == pattern[length])
-		{
-			length++;
-			table[i] = length;
-			i++;
-		}
+			table[i++] = ++length;
 		else
 		{
 			if (length)
 				length = table[length - 1];
 			else
-			{
-				table[i] = 0; i++;
-			}
+				table[i++] = 0;
 		}
 	}
 }

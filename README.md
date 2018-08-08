@@ -23,3 +23,5 @@ Note that:
 - [Strings](/String)
   - [Longest palindromic substring](/String/Palindromic%20Substring)
     - [Manacher's algorithm](/String/Palindromic%20Substring/LongestPalindromicSubstring_Manacher.cpp)
+  - [String matching](/String/String%20Matching)
+    - [Knuth-Morris-Pratt algorithm](/String/String%20Matching/KnuthMorrisPratt.cpp)

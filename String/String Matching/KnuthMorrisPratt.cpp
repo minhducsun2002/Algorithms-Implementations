@@ -1,4 +1,9 @@
-#include <bits/stdc++.h>
+#include <vector>
+#include <string>
+#if __cpluscplus>=201703L
+#include <string_view>
+#endif
+#include <iostream>		// included only for cin and cout in demonstration, unneeded for uses of kmp() only
 using namespace std;
 
 typedef long long int llint;
@@ -17,12 +22,10 @@ void partial_match_compute (string pattern, vector <llint>& table)
 		if (pattern[i] == pattern[length])
 			table[i++] = ++length;
 		else
-		{
 			if (length)
 				length = table[length - 1];
 			else
 				table[i++] = 0;
-		}
 	}
 }
 

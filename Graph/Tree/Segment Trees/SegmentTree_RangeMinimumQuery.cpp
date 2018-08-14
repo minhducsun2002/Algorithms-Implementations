@@ -1,7 +1,4 @@
-#include <bits/stdc++.h>
 #include <iostream> // this header isn't required to use the wrapped functions
-
-using namespace std;
 
 typedef long long int llint;
 const long long int LLINT_MAX = LLONG_MAX;
@@ -48,7 +45,7 @@ llint rmq(llint first_element, llint last_element, llint treetop, llint arr_firs
 int main()
 {
     llint length;
-    std::cout << "Enter number of elements : "; cin >> length;
+    std::cout << "Enter number of elements : "; std::cin >> length;
     for (llint i = 0 ; i <= length - 1 ; i++) 
     {
         std::cout << "Enter element " << i + 1 << " : "; std::cin >> arr[i];
@@ -56,6 +53,6 @@ int main()
     buildtree(0, length - 1, 0);
     // for (llint i = 0 ; i <=  pow(2, ceil(log(length)/log(2))) ; i++) cout << segtree[i] << " ";
     std::cout << "Enter range query : ";
-    llint m, n; cin >> m >> n;
+    llint m, n; std::cin >> m >> n;
     std::cout << "Minimum in range : " << rmq(0, length - 1, 0, --m, --n);
 }

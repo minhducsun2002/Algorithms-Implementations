@@ -1,12 +1,15 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <vector>
+#include <pair>
+
+#include <iostream>
+// not required
 
 typedef long long int llint;
 
 // Richard Bellman & Lester Ford, Jr.'s algorithm to find shortest path between two vertices in a graph,
 // using adjacency list representation
 
-const long long int MAX = 1e9 + 7;
+const llint MAX = 1e9 + 7;
 
 // Note that the index of each vertex counts from 0.
 
@@ -18,15 +21,15 @@ struct edge
 	// including the weight of the edge connecting them
 };
 
-vector <vector <edge> > adjacencyList;
+std::vector <std::vector <edge> > adjacencyList;
 
-pair <vector <llint>, bool> bellman_ford(llint source)
+std::pair <vector <llint>, bool> bellman_ford(llint source)
 {
-    vector <llint> distance (adjacencyList.size(), MAX);
+    std::vector <llint> distance (adjacencyList.size(), MAX);
     // the distance from a vertex to itself always = 0
     distance[source] = 0;
 
-    vector <llint> path (adjacencyList.size());
+    std::vector <llint> path (adjacencyList.size());
 
 
     // repeatedly shorten edges
@@ -77,23 +80,23 @@ pair <vector <llint>, bool> bellman_ford(llint source)
 
 main()
 {
-	llint verticesCount; cin >> verticesCount;
+	llint verticesCount; std::cin >> verticesCount;
 	// prepare traversal logging and adjacency list
 	adjacencyList.resize(verticesCount);
 
 	for (llint i = 0 ; i <= verticesCount - 1 ; i++)
 	{
-		llint neighbour_count; cin >> neighbour_count;
+		llint neighbour_count; std::cin >> neighbour_count;
 		while (neighbour_count--)
 		{
 			// edge between vertex[i] and vertex[push.targetVertex] with weight = push.weight
-			edge push; cin >> push.targetVertex >> push.weight;
+			edge push; std::cin >> push.targetVertex >> push.weight;
 			adjacencyList[i].push_back(push);
 		};
 	};
-	vector <llint> out = bellman_ford(0).first;
-	for (llint i : out) cout << (i != MAX ? to_string(i) : string ("MAX")) << " ";
-    if (bellman_ford(0).second) cout << "Error :: Negative cycle found.";
+	std::vector <llint> out = bellman_ford(0).first;
+	for (llint i : out) std::cout << (i != MAX ? to_string(i) : string ("MAX")) << " ";
+    if (bellman_ford(0).second) std::cout << "Error :: Negative cycle found.";
 }
 
 /*

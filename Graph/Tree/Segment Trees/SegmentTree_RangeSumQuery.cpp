@@ -1,7 +1,4 @@
-#include <bits/stdc++.h>
 #include <iostream> // this header isn't required to use the wrapped functions
-
-using namespace std;
 
 typedef long long int llint;
 const long long int LLINT_MAX = LLONG_MAX;
@@ -49,7 +46,7 @@ int main()
 {
     llint length;
     //std::cout << "Enter number of elements : ";
-    cin >> length;
+    std::cin >> length;
     for (llint i = 0 ; i <= length - 1 ; i++) 
     {
         //std::cout << "Enter element " << i + 1 << " : ";
@@ -58,7 +55,7 @@ int main()
     buildtree(0, length - 1, 0);
     // for (llint i = 0 ; i <=  pow(2, ceil(log(length)/log(2))) ; i++) cerr << segtree[i] << " ";
     //std::cout << "Enter range query : ";
-    llint m, n; cin >> m >> n;
+    llint m, n; std::cin >> m >> n;
     //std::cout << "Sum of range : ";
-    cout << rsq(0, length - 1, 0, --m, --n);
+    std::cout << rsq(0, length - 1, 0, --m, --n);
 }

@@ -1,7 +1,8 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <pair>
+#include <set>
+#include <vector>
 
-typedef long long int llint;
+typedef ssize_t llint;
 typedef size_t ullint;
 
 // Prim's algorithm to find the minimum spanning tree in a connected graph
@@ -11,34 +12,33 @@ const long long int MAX = 1e9 + 7;
 
 // Note that the index of each vertex counts from 0.
 
-typedef pair <llint, llint> edge;
+typedef std::pair <llint, llint> edge;
 // edge.first == weight, edge.second == target_vertex
 
-typedef pair <llint, edge> extended_edge;
+typedef std::pair <llint, edge> extended_edge;
 // extended.first == weight
 // 			second.first == source
 // 			second.destination == destination
 
-vector <vector <edge > > adjacencyList;
+std::vector <std::vector <edge > > adjacencyList;
 
 edge make_edge_from_to(llint source, llint destination)
 {
-	return make_pair(source, destination)
-	;
+	return make_pair(source, destination);
 }
 
 auto prim(llint source, vector <vector <edge> > adjacencyList)
 {
-	vector <bool> included (adjacencyList.size(), false);
+	std::vector <bool> included (adjacencyList.size(), false);
 	// tracking whether vertex included
 
-	multiset <extended_edge> remaining_edges;
+	std::multiset <extended_edge> remaining_edges;
 	// track unprocessed edges
 
-	remaining_edges.insert(make_pair(0, make_edge_from_to(source, source)));
+	remaining_edges.insert(std::make_pair(0, make_edge_from_to(source, source)));
 	// the distance from source -> source == 0
 
-	vector <llint> parent (adjacencyList.size());
+	std::vector <llint> parent (adjacencyList.size());
 
 	// llint MST_size = 0;	// *
 
@@ -67,7 +67,7 @@ auto prim(llint source, vector <vector <edge> > adjacencyList)
 		included[nearest.second.second] = true;
 		// include this vertex (i.e. use the current edge in the MST)
 
-		for (pair <llint, llint> a: adjacencyList[nearest.second.second])
+		for (std::pair <llint, llint> a: adjacencyList[nearest.second.second])
 			// for each edge from this vertex
 			// i.e. the "just included" vertex
 		{

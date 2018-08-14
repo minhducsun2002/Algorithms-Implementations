@@ -1,7 +1,10 @@
-#include <bits/stdc++.h>
-using namespace std;
- 
-typedef long long int llint;
+#include <vector>
+#include <algorithm>
+#include <iostream>	// unneeded for usage of the function
+
+// Be noted that this searching method will only work if the array is sorted.
+
+typedef int32_t llint;
  
 // binary search algorithm to find a specific value in a sorted array
  
@@ -15,12 +18,12 @@ llint binary_search (llint query, std::vector <llint> &vct, llint start, llint e
  
 main()
 {
-	llint arrayLength; cin >> arrayLength;
-	vector <llint> vct (arrayLength);
-	for (llint &i : vct) cin >> i;
-	sort (vct.begin(), vct.end());
+	llint arrayLength; std::cin >> arrayLength;
+	std::vector <llint> vct (arrayLength);
+	for (llint &i : vct) std::cin >> i;
+	std::sort (vct.begin(), vct.end());
  
-	cout << "Enter the value to find: \n";
-	llint query; cin >> query;
-	cout << "Position found: " << binary_search (query, vct, 0, vct.size() - 1);
+	std::cout << "Enter the value to find: \n";
+	llint query; std::cin >> query;
+	std::cout << "Position found: " << binary_search (query, vct, 0, vct.size() - 1);
 }

@@ -38,21 +38,36 @@ std::vector<llint> dijkstra(llint source, llint target, std::vector<std::vector<
     std::vector<llint> backtrace(adjacencyList.size(), MAX);
     // keep the shortest path
 
-    std::set<std::pair<llint, llint>> vertices;
+    std::multiset<std::pair<llint, llint>> vertices;
+    // keeping a set of unprocessed edges
     vertices.insert({0, source});
+    // the distance between a vertex and itself == 0, as stated above
     while (!vertices.empty())
     {
         llint currentVertex = vertices.begin()->second;
         if (currentVertex == target)
+            // if the target vertex has been found, stop
             break;
         vertices.erase(vertices.begin());
+        // remove already-processed edge
         for (const auto &child : adjacencyList[currentVertex])
+            // for each child vertex of current vertex
             if (distance[child.targetVertex] > distance[currentVertex] + child.weight)
             {
+                // if distance from source to this {child vertex} is greater than
+                // the distance from source to current vertex plus from the current vertex to this {child vertex}
+                // ==
+                // also known as
+                // ==
+                // if there exists a shorter path to this {child vertex}
                 vertices.erase({distance[child.targetVertex], child.targetVertex});
+                // then remove that edge from the edge process queue
                 distance[child.targetVertex] = distance[currentVertex] + child.weight;
+                // and recalculate distance
                 vertices.insert({distance[child.targetVertex], child.targetVertex});
+                // afterward re-add the edge with shortened distance
                 backtrace[child.targetVertex] = currentVertex;
+                // and also don't forget updating path!
             }
     }
 

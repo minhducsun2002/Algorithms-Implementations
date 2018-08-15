@@ -4,13 +4,13 @@
 #include <set>
 #include <utility>
 
-typedef ssize_t llint;
+typedef int32_t llint;
 typedef size_t ullint;
 
 // Dijkstra's algorithm to find shortest path between two vertices in a graph,
 // using adjacency list representation
 
-const long long int MAX = INT64_MAX;
+const llint MAX = INT32_MAX;
 
 // Note that the index of each vertex counts from 0.
 

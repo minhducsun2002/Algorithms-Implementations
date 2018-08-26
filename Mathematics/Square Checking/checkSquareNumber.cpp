@@ -3,7 +3,7 @@
 bool is_square(long long int i)
 {
 	if (i - 1 <= 0) return true;
-	int last = i % 10; if (i == 2 || i == 3 || i == 7 || i == 8) return false;
+	int last = i % 10; if (last == 2 || last == 3 || last == 7 || last == 8) return false;
 	long long int sum = 0, step = 1;
 	while (sum < i)
 	{

@@ -10,32 +10,30 @@ void mergeArr(long long int *arr, long long int firstPos,long long int mid,long 
     {
         if (arr[first1] < arr[first2])
         {
-            mirr[currPos] = arr[first1];
-            currPos++; first1++;
+            mirr[currPos] = arr[first1++];
+            currPos++;
         }
         else
         {
-            mirr[currPos] = arr[first2];
-            currPos++; first2++;
+            mirr[currPos] = arr[first2++];
+            currPos++;
         }
     };
     while (first1 <= last1 || first2 <= last2)
     {
         if (first1 <= last1 && first2 > last2)
         {
-            mirr[currPos] = arr[first1];
-            currPos++; first1++;
+            mirr[currPos] = arr[first1++];
+            currPos++;
         };
         if (first1 > last1 && first2 <= last2)
         {
-            mirr[currPos] = arr[first2];
-            currPos++; first2++;
+            mirr[currPos] = arr[first2++];
+            currPos++;
         }
     };
     for (unsigned long long int i = firstPos ; i <= lastPos ; i++)
-    {
         arr[i] = mirr[i - firstPos];
-    }
 }
 
 void mergeSort(long long int *arr,long long int firstPos,long long int lastPos)
@@ -43,7 +41,7 @@ void mergeSort(long long int *arr,long long int firstPos,long long int lastPos)
     if (lastPos > firstPos)
     {
 
-        long long int mid = (lastPos + firstPos) / 2;
+        long long int mid = (lastPos + firstPos) >> 1;
         mergeSort(arr,firstPos,mid);
         mergeSort(arr,mid + 1,lastPos);
         mergeArr(arr,firstPos,mid,lastPos);
